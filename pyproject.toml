@@ -1,0 +1,24 @@
+[project]
+name = "gitlense-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "bcrypt>=5.0.0",
+    "celery>=5.6.2",
+    "fastapi[standard]>=0.134.0",
+    "langchain-core>=1.2.16",
+    "langchain-openai>=1.1.10",
+    "langchain-qdrant>=1.1.0",
+    "langchain-text-splitters>=1.1.1",
+    "motor>=3.7.1",
+    "openai>=2.24.0",
+    "pydantic-settings>=2.13.1",
+    "pyjwt>=2.11.0",
+    "pymongo>=4.16.0",
+    "python-dotenv>=1.2.1",
+    "python-jose[cryptography]>=3.5.0",
+    "qdrant-client>=1.17.0",
+    "redis>=7.2.1",
+]
