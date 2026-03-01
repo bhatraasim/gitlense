@@ -5,7 +5,7 @@ celery_app = Celery(
     "gitlens",
     broker=settings.REDIS_URL,      # redis://localhost:6379/0
     backend=settings.REDIS_URL,     # Store results here too
-    include=["app.workers.tasks"]   # Import path to tasks
+    include=["worker.tasks"]   # Import path to tasks
 )
 
 # Optional: Configure Celery settings

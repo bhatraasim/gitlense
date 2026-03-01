@@ -5,7 +5,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from config import settings
 from bson import ObjectId
 from jose import JWTError
-
+from model.user import UserResponse , User
 
 # you'll build these helpers yourself
 from services.auth import hash_password, create_token , verify_password , decode_token
@@ -28,12 +28,11 @@ async def register(body: RegisterRequest):
     #2.hash the password
     hashed_password = hash_password(body.password)
     #3.create user record
-    user = {
-        "name": body.name,   
-        "email": body.email,
-        "password": hashed_password,
-        "created_at": datetime.utcnow()
-    }
+    user = User(
+        name=body.name,
+        email=body.email,
+        hashed_password=hashed_password
+    )
     result = await db.users.insert_one(user)
     user_id = str(result.inserted_id)
     #4.generate token
@@ -43,15 +42,15 @@ async def register(body: RegisterRequest):
     })
 
     return {
-        "access_token": token,
-        "token_type": "bearer",
-        "message": "User registered successfully",
-        "user": {
-            "id": str(result.inserted_id),
-            "name": body.name,
-            "email": body.email
-        }
-    }
+    "access_token": token,
+    "token_type": "bearer",
+    "user": UserResponse(
+        id=str(result.inserted_id),
+        name=body.name,
+        email=body.email,
+        created_at=datetime.utcnow()
+    )
+}
 
 @router.post("/login")
 async def login(body: RegisterRequest):
@@ -60,7 +59,7 @@ async def login(body: RegisterRequest):
     if not user:
         raise HTTPException(status_code=400, detail="Invalid email")
     #2.verify password
-    if not verify_password(body.password, user["password"]):
+    if not verify_password(body.password, user["hashed_password"]):
         raise HTTPException(status_code=400, detail="Invalid  password")
     #3.generate token
     token = create_token({
@@ -68,14 +67,15 @@ async def login(body: RegisterRequest):
         "email": user["email"]
     })
     return {
-        "access_token": token,
-        "token_type": "bearer",
-        "user": {
-            "id": str(user["_id"]),
-            "name": user["name"],
-            "email": user["email"]
-        }
-    }
+    "access_token": token,
+    "token_type": "bearer",
+    "user": UserResponse(
+        id=str(user["_id"]),
+        name=user["name"],
+        email=user["email"],
+        created_at=user["created_at"]
+    )
+}
 
 
 @router.post("/logout")
