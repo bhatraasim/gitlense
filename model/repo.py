@@ -18,7 +18,7 @@ class Repo(BaseModel):
     user_id: str                        # who owns this repo
     repo_url: str                       # github url
     repo_name: str                      # e.g. "fastapi"
-    status: RepoStatus = RepoStatus.queued
+    status: str = RepoStatus.queued         # processing status
     file_count: int = 0
     chunk_count: int = 0
     error: Optional[str] = None        # store error message if failed

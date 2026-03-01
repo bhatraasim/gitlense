@@ -1,3 +1,12 @@
+print("importing github...")
+from services.github import clone_repository, get_repo_info
+print("importing parser...")
+from services.parser import parse_repo
+print("importing embedder...")
+from services.embedder import embed_documents
+print("all imports ok")
+
+
 import os
 import shutil
 from bson import ObjectId
