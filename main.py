@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth
+from routers import auth , chat, repos
 import os
 
 
@@ -11,13 +11,18 @@ from config import settings
 
 
 
-
-# CORS for your Vite frontend
+#Cors configuration
+origins = [
+    "http://localhost:5174", 
+    "http://localhost:5173", # standard vite port
+    os.getenv("FRONTEND_URL", "")
+]
 app.add_middleware(
     CORSMiddleware,
-    "http://localhost:5173",
-    os.getenv("FRONTEND_URL", ""),
-    allow_credentials=True
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"], # Critical: Allows POST, OPTIONS, PUT, DELETE
+    allow_headers=["*"], # Critical: Allows Content-Type and Authorization headers
 )
 
 @app.get("/health")
@@ -31,3 +36,5 @@ async def root():
 
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(chat.router, prefix="/chat", tags=["chat"])
+app.include_router(repos.router, prefix="/repos", tags=["repos"])

@@ -6,7 +6,20 @@ from qdrant_client.models import Filter, FieldCondition, MatchValue
 from langchain_qdrant import QdrantVectorStore
 from langchain_openai import OpenAIEmbeddings  # Add this
 from config import settings
+from qdrant_client import QdrantClient
+from qdrant_client.models import PayloadSchemaType
 
+def create_indexes():
+    """Run this once to create required indexes"""
+    client = QdrantClient(
+        url=settings.QDRANT_URL,
+        api_key=settings.QDRANT_API_KEY
+    )
+    client.create_payload_index(
+        collection_name=settings.QDRANT_COLLECTION,
+        field_name="metadata.repo_id",
+        field_schema=PayloadSchemaType.KEYWORD
+    )
 
 def get_embeddings():
     # single place to create the embeddings model

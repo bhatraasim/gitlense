@@ -33,7 +33,7 @@ async def register(body: RegisterRequest):
         email=body.email,
         hashed_password=hashed_password
     )
-    result = await db.users.insert_one(user)
+    result = await db.users.insert_one(user.model_dump())
     user_id = str(result.inserted_id)
     #4.generate token
     token = create_token({

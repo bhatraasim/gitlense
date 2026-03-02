@@ -18,7 +18,7 @@ from services.parser import parse_repo
 from services.embedder import embed_documents
 
 # sync mongo client — only for use inside celery tasks
-sync_client = MongoClient(settings.MONGODB_URI)
+sync_client = MongoClient(settings.MONGODB_URI, tlsAllowInvalidCertificates=True)
 sync_db = sync_client[settings.MONGODB_DB_NAME]
 
 

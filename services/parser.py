@@ -5,8 +5,20 @@ from config import settings
 SKIP_DIRS = {
     ".git", "node_modules", "__pycache__", ".venv", "venv",
     "env", "dist", "build", ".next", ".nuxt", "coverage",
-    ".pytest_cache", ".mypy_cache", "migrations", ".idea", ".vscode"
+    ".pytest_cache", ".mypy_cache", "migrations", ".idea", ".vscode",
 }
+
+SKIP_FILES = {
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "poetry.lock",
+    "uv.lock",
+    ".env",
+    ".gitignore",
+    ".DS_Store"
+}
+
 
 # code-aware separators — tries these in order before falling back to chars
 CODE_SEPARATORS = [
@@ -33,6 +45,8 @@ def get_all_files(repo_path: str) -> list[dict]:
         if file_path.is_dir():
             continue
         if any(part in SKIP_DIRS for part in file_path.parts):
+            continue
+        if file_path.name in SKIP_FILES:      # ← add this line
             continue
         if file_path.suffix not in settings.SUPPORTED_EXTENSIONS:
             continue
