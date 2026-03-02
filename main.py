@@ -30,10 +30,10 @@ origins = [
 ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"], # Critical: Allows POST, OPTIONS, PUT, DELETE
-    allow_headers=["*"], # Critical: Allows Content-Type and Authorization headers
+    allow_origins=["*"],   # temporarily allow all origins to test
+    allow_credentials=False,  # must be False when allow_origins=["*"]
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 @app.get("/health")
