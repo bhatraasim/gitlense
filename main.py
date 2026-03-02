@@ -14,7 +14,8 @@ from config import settings
 #Cors configuration
 origins = [
     "http://localhost:5173", # standard vite port
-    "https://gitlens-client.netlify.app",
+    "https://gitlense-production.up.railway.app/",
+    "https://gitlense-production.up.railway.app"
     settings.FRONTEND_URL,
 ]
 app.add_middleware(
