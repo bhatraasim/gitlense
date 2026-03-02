@@ -22,16 +22,14 @@ async def log_requests(request: Request, call_next):
 
 
 #Cors configuration
-origins = [
-    "http://localhost:5173", # standard vite port
-    "https://gitlense-production.up.railway.app/",
-    "https://gitlense-production.up.railway.app",
-    settings.FRONTEND_URL,
-]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # temporarily allow all origins to test
-    allow_credentials=False,  # must be False when allow_origins=["*"]
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://gitlens-client.netlify.app",  # your exact netlify URL
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
