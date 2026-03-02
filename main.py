@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import auth , chat, repos
-import os
+from config import settings
 
 
 app = FastAPI(
@@ -13,9 +13,8 @@ from config import settings
 
 #Cors configuration
 origins = [
-    "http://localhost:5174", 
     "http://localhost:5173", # standard vite port
-    os.getenv("FRONTEND_URL", "")
+    settings.FRONTEND_URL,
 ]
 app.add_middleware(
     CORSMiddleware,

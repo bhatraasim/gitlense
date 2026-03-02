@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     CHAT_MODEL: str = "gpt-4o"
 
     # Frontend
-    FRONTEND_URL: str = "http://localhost:5173"
+    FRONTEND_URL: str 
 
     # Repo Processing
     TEMP_CLONE_DIR: str = "/tmp/gitlens_repos"
