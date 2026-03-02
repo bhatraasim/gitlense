@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     QDRANT_COLLECTION: str = "code_chunks"
 
     # Redis (local VM)
-    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_URL: str 
 
     # OpenAI
     OPENAI_API_KEY: SecretStr
