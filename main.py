@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI , Response
 from fastapi.middleware.cors import CORSMiddleware
 from routers import auth , chat, repos
 from config import settings
@@ -33,6 +33,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.options("/{rest_of_path:path}")
+async def preflight_handler(request: Request, rest_of_path: str):
+    return Response(
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": request.headers.get("origin", "*"),
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Credentials": "true",
+        }
+    )
+
 
 @app.get("/health")
 async def health_check():
