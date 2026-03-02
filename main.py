@@ -15,7 +15,7 @@ from config import settings
 origins = [
     "http://localhost:5173", # standard vite port
     "https://gitlense-production.up.railway.app/",
-    "https://gitlense-production.up.railway.app"
+    "https://gitlense-production.up.railway.app",
     settings.FRONTEND_URL,
 ]
 app.add_middleware(
