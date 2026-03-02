@@ -9,6 +9,16 @@ app = FastAPI(
 )
 from config import settings
 
+from fastapi import Request
+import logging
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    print(f"Origin: {request.headers.get('origin')}")
+    print(f"Method: {request.method}")
+    response = await call_next(request)
+    print(f"Response status: {response.status_code}")
+    return response
 
 
 #Cors configuration
