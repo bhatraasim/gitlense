@@ -49,7 +49,7 @@ async def ingest(request: IngestRequest, user=Depends(get_current_user)):
 
     # 4. fire celery task
     
-    task = ingest_repo_task.delay(repo_id, request.repo_url)# type: ignore
+    task = ingest_repo_task.delay(repo_id, request.repo_url) # type: ignore
 
     # 5. store task_id in mongo so status endpoint can find it
     await db.repos.update_one(

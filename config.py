@@ -39,6 +39,9 @@ class Settings(BaseSettings):
     EMBEDDING_DIMENSIONS: int = 1536
     CHAT_MODEL: str = "gpt-4o"
 
+    #cohere
+    COHERE_API_KEY: str
+
     # Frontend
     FRONTEND_URL: str 
 

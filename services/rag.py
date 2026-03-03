@@ -2,11 +2,13 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
 from services.qdrant import search
 from config import settings
+from services.rerank import rerank_chunks
 
 
 def generate_answer(question: str, repo_id :str , chat_history) -> dict:
 
-    chunks = search(question=question, repo_id=repo_id, top_k=5)
+    chunks = search(question=question, repo_id=repo_id, top_k=20)
+    chunks = rerank_chunks(question=question, chunks=chunks, top_k=5)
     if not chunks:
         return {
             "answer": "I couldn't find anything relevant in this codebase.",
