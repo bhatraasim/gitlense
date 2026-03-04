@@ -1,6 +1,0 @@
-# nixpacks.toml
-[phases.setup]
-nixPkgs = ["git", "python313"]
-
-[phases.install]
-cmds = ["uv sync --frozen"]
