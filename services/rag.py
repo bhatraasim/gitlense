@@ -82,17 +82,17 @@ def expand_query(question: str) -> str:
     question_lower = question.lower().strip()
     for pattern, expansion in VAGUE_QUESTION_EXPANSIONS.items():
         if pattern in question_lower:
-            print(f"Rule-based expansion: '{question}' → '{expansion}'")
+            print(f"Rule-bas1ed expansion: '{question}' → '{expansion}'")
             return expansion
     
     # fall back to LLM expansion for everything else
     expansion_prompt = f"""You are a search query optimizer for code repositories.
 
-Convert this question into technical search terms to find relevant code chunks.
-Return ONLY space-separated keywords, no explanation, under 20 words.
+    Convert this question into technical search terms to find relevant code chunks.
+    Return ONLY space-separated keywords, no explanation, under 20 words.
 
-Question: {question}
-Search terms:"""
+    Question: {question}
+    Search terms:"""
 
     response = llm.invoke([HumanMessage(content=expansion_prompt)])
     expanded = str(response.content).strip()
