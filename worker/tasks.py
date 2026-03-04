@@ -53,6 +53,13 @@ def ingest_repo(self, repo_id: str, repo_url: str):
         # 4. parse
         update_status(repo_id, "parsing")
         chunks = parse_repo(clone_path)
+        print(f"========= CHUNKS FOUND: {len(chunks)} =========")  # add this
+        print(f"========= FILES: {set(c['file_path'] for c in chunks)} =========")
+        
+        print(f"Files found: {len(set(c['file_path'] for c in chunks))}")
+        print(f"Total chunks: {len(chunks)}")
+        for file in set(c['file_path'] for c in chunks):
+            print(f"  - {file}")
 
         # 5. embed
         update_status(repo_id, "embedding")

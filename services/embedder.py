@@ -19,9 +19,10 @@ def chunks_to_documents(chunks: list[dict]) -> list[Document]:
          page_content = chunk["chunk_text"],
             metadata = {
                "file_path": chunk["file_path"],
-                "extension": chunk["extension"],
-                "chunk_index": chunk["chunk_index"],
-                "repo_id": chunk.get("repo_id", ""),
+               "extension": chunk["extension"],
+               "chunk_index": chunk["chunk_index"],
+               "repo_id": chunk.get("repo_id", ""),
+               "chunk_text": chunk["chunk_text"],
             }
       )
 

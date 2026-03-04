@@ -38,7 +38,7 @@ def get_vector_store() -> QdrantVectorStore:
     )
 
 
-def search(question : str ,repo_id : str , top_k : int = 5 ) -> list[dict]:
+def search(question : str ,repo_id : str , top_k : int = 20 ) -> list[dict]:
     
     vector_store = get_vector_store()
 
@@ -50,6 +50,18 @@ def search(question : str ,repo_id : str , top_k : int = 5 ) -> list[dict]:
             )
         ]
     )
+    client = QdrantClient(url=settings.QDRANT_URL, api_key=settings.QDRANT_API_KEY)
+    count = client.count(
+        collection_name=settings.QDRANT_COLLECTION,
+        count_filter=Filter(
+            must=[FieldCondition(
+                key="metadata.repo_id",
+                match=MatchValue(value=repo_id)
+            )]
+        )
+    )
+    print(f"Total chunks for this repo in Qdrant: {count.count}")
+    
     results = vector_store.similarity_search_with_score(
         query=question,
         k=top_k,
@@ -62,7 +74,7 @@ def search(question : str ,repo_id : str , top_k : int = 5 ) -> list[dict]:
             "extension": doc.metadata.get("extension", ""),
             "chunk_index": doc.metadata.get("chunk_index", -1),
             "repo_id": doc.metadata.get("repo_id", ""),
-            "content": doc.page_content,
+            "content": doc.page_content or doc.metadata.get("chunk_text", "") ,
             "score": round(score, 4)  
         }
         for doc , score in results
