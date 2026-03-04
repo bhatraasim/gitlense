@@ -12,7 +12,7 @@ def rerank_chunks(question: str, chunks: list[dict], top_k: int = 5, threshold: 
         f"File: {chunk['file_path']}\n\n{chunk['content']}"
         for chunk in chunks
     ]
-    print(f"First document sample: {documents[0][:200]}")  # add this
+    # print(f"First document sample: {documents[0][:200]}")  # add this
     
     results = co.rerank(
         model="rerank-english-v3.0",
@@ -35,7 +35,9 @@ def rerank_chunks(question: str, chunks: list[dict], top_k: int = 5, threshold: 
     # only filter if score is truly terrible
     # reranked = [c for c in reranked if c["rerank_score"] > 0.001]
     
-    print(f"Cohere raw results count: {len(results.results)}")
-    for r in results.results:
-        print(f"  index={r.index} score={r.relevance_score}")
+    # print(f"Cohere raw results count: {len(results.results)}")
+    # for r in results.results:
+    #     print(f"  index={r.index} score={r.relevance_score}")
+
+
     return reranked[:top_k]

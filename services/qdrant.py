@@ -60,7 +60,7 @@ def search(question : str ,repo_id : str , top_k : int = 20 ) -> list[dict]:
             )]
         )
     )
-    print(f"Total chunks for this repo in Qdrant: {count.count}")
+    # print(f"Total chunks for this repo in Qdrant: {count.count}")
     
     results = vector_store.similarity_search_with_score(
         query=question,

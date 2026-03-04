@@ -108,7 +108,7 @@ def chunk_code_file(file_path: Path, relative_path: str, extension: str) -> list
         )
 
         documents = loader.load()
-        print(f"LanguageParser: {relative_path} → {len(documents)} chunks")  # debug
+        # print(f"LanguageParser: {relative_path} → {len(documents)} chunks")  # debug
 
         if not documents:
             # LanguageParser failed — fall back to text chunker
