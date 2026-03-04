@@ -3,4 +3,4 @@
 nixPkgs = ["git", "python313"]
 
 [phases.install]
-cmds = ["pip install uv", "uv sync --frozen"]
+cmds = ["uv sync --frozen"]
