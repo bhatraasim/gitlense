@@ -5,6 +5,7 @@ from services.rag import generate_answer
 from routers.auth import get_current_user   # your dependency from auth.py
 from services.database import db
 from bson import ObjectId
+from datetime import datetime, timezone
 
 
 
@@ -47,4 +48,47 @@ async def chat(request: ChatRequest, current_user = Depends(get_current_user)):
         chat_history=converted_history
     )
 
+    new_messages = [
+        {"role": "human", "content": request.question , "timestamp": datetime.now(timezone.utc)}, 
+        {"role": "ai", "content": response["answer"], "timestamp": datetime.now(timezone.utc)}
+    ]
+
+    # 3. save the question and answer to the database 
+
+    await db.chat_history.update_one(
+        {
+            "user_id": str(current_user["_id"]),
+            "repo_id": request.repo_id
+        },
+        {
+            "$push": {"messages": {"$each": new_messages}},
+            "$set":  {"updated_at": datetime.now(timezone.utc)},
+            "$setOnInsert": {"created_at": datetime.now(timezone.utc)}
+        },
+        upsert=True
+    )
+
+        
     return response
+
+@router.get("/history/{repo_id}")
+async def get_chat_history(repo_id: str, current_user = Depends(get_current_user)):
+    repo = await db.repos.find_one({
+        "_id": ObjectId(repo_id),
+        "user_id": str(current_user["_id"])
+    })
+    if not repo:
+        raise HTTPException(status_code=404, detail="Repo not found")
+
+    doc = await db.chat_history.find_one({
+        "user_id": str(current_user["_id"]),
+        "repo_id": repo_id
+    })
+
+    if not doc:
+        return {"repo_id": repo_id, "messages": []}
+
+    # serialize ObjectId
+    doc["_id"] = str(doc["_id"])
+
+    return doc 

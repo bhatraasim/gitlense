@@ -34,19 +34,20 @@ def generate_answer(question: str, repo_id: str, chat_history: list = []) -> dic
     ])
 
     system_prompt = f"""
-    You are an expert code assistant analyzing a GitHub repository.
-    You will be given relevant code chunks from the codebase and a question.
+        You are an expert code assistant analyzing a GitHub repository.
+        You will be given relevant code chunks from the codebase and a question.
 
-    Rules:
-    - Answer based ONLY on the provided code chunks
-    - Always mention which file your answer comes from
-    - If the answer is not in the chunks, say "I couldn't find that in this codebase"
-    - Be concise and technical
-    - When showing code, use markdown code blocks
+        Rules:
+        - For questions about THIS specific codebase (files, functions, architecture) → 
+        answer ONLY from the provided code chunks and cite file names
+        - For general programming concepts (what is X, how does Y work, explain Z) → 
+        answer from your general knowledge and make it clear it's a general explanation
+        - Be concise and technical
+        - Use markdown code blocks when showing code
 
-    Context:
-    {formatted_chunks}
-    """
+        Code chunks from the repository:
+        {formatted_chunks}
+        """
 
     messages = [
         SystemMessage(content=system_prompt),
@@ -76,6 +77,7 @@ VAGUE_QUESTION_EXPANSIONS = {
     "explain the project": "README overview project description purpose main functionality",
     "what is this project": "README overview project description purpose main functionality",
 }
+
 
 def expand_query(question: str) -> str:
     # check rule-based first — saves an API call
